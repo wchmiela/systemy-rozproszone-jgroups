@@ -1,10 +1,9 @@
 package hashmap;
 
+import client.Client;
 import org.jgroups.JChannel;
 import org.jgroups.protocols.*;
-import org.jgroups.protocols.pbcast.GMS;
-import org.jgroups.protocols.pbcast.NAKACK2;
-import org.jgroups.protocols.pbcast.STABLE;
+import org.jgroups.protocols.pbcast.*;
 import org.jgroups.stack.Protocol;
 import org.jgroups.stack.ProtocolStack;
 
@@ -12,11 +11,13 @@ import java.net.InetAddress;
 
 public class JGroupChannelSetup {
 
+    private Client client;
     private String address;
     private String channelName;
     private JChannel channel;
 
-    public JGroupChannelSetup(String address, String channelName) {
+    public JGroupChannelSetup(Client client, String address, String channelName) {
+        this.client = client;
         this.address = address;
         this.channelName = channelName;
         try {
@@ -45,7 +46,10 @@ public class JGroupChannelSetup {
                 .addProtocol(new GMS())
                 .addProtocol(new UFC())
                 .addProtocol(new MFC())
-                .addProtocol(new FRAG2());
+                .addProtocol(new FRAG2())
+                .addProtocol(new SEQUENCER())
+                .addProtocol(new STATE_TRANSFER())
+                .addProtocol(new FLUSH());
 
         return stack;
     }
@@ -54,10 +58,12 @@ public class JGroupChannelSetup {
         this.channel = new JChannel(false);
 
         ProtocolStack protocolStack = setupProtocolStack();
+        this.channel.setReceiver(client);
         this.channel.setProtocolStack(protocolStack);
         protocolStack.init();
 
         this.channel.connect(channelName);
+        this.channel.getState(null, 30000);
     }
 
     public JChannel getChannel() {

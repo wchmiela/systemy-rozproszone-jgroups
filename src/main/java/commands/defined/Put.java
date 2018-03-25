@@ -2,10 +2,11 @@ package commands.defined;
 
 import client.Client;
 import commands.Command;
+import commands.Receiver;
 import hashmap.HashMapOperationProtos;
 import org.jgroups.Message;
 
-public class Put implements Command {
+public class Put implements Command, Receiver {
 
     private final Client client;
     private String key;
@@ -37,6 +38,11 @@ public class Put implements Command {
             client.getChannel().close();
         }
 
+        apply();
+    }
+
+    @Override
+    public void apply() {
         client.getMap().put(key, value);
     }
 }

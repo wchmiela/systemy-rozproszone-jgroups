@@ -12,7 +12,7 @@ public class ViewHandler implements Runnable {
     private JChannel channel;
     private MergeView view;
 
-    private ViewHandler(JChannel channel, MergeView view) {
+    public ViewHandler(JChannel channel, MergeView view) {
         this.channel = channel;
         this.view = view;
     }

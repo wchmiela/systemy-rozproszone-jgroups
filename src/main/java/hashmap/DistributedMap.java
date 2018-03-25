@@ -10,10 +10,17 @@ public class DistributedMap implements SimpleStringMap {
     private Map<String, String> map;
     private JChannel channel;
 
+    public DistributedMap() {
+        this.map = new ConcurrentHashMap<>();
+    }
+
+    public void setChannel(JChannel channel) {
+        this.channel = channel;
+    }
+
     public DistributedMap(JChannel channel) {
         this.channel = channel;
 
-        this.map = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -38,5 +45,9 @@ public class DistributedMap implements SimpleStringMap {
 
     public JChannel getChannel() {
         return channel;
+    }
+
+    public Map<String, String> getMap() {
+        return map;
     }
 }

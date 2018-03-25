@@ -16,12 +16,10 @@ import java.util.stream.Collectors;
 
 public class MyParser implements Parser {
 
-    private final Client client;
     private Deque<Expression> s;
     private ImmutableMap<String, Expression> expressions;
 
     public MyParser(Client client) {
-        this.client = client;
         this.s = new ArrayDeque<>();
         this.expressions = new ImmutableMap.Builder<String, Expression>()
                 .put("put", new TerminalExpressionPUT(client))

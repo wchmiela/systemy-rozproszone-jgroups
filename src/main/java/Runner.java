@@ -12,12 +12,14 @@ public class Runner {
     private static final String channelName = "rozprochyy";
 
     public static void main(String[] args) {
-        JGroupChannelSetup setup = new JGroupChannelSetup(address, channelName);
-        JChannel channel = setup.getChannel();
-
-        DistributedMap distributedMap = new DistributedMap(channel);
-
+//        DistributedMap distributedMap = new DistributedMap(channel);
+        DistributedMap distributedMap = new DistributedMap();
         Client client = new Client(distributedMap);
+
+        JGroupChannelSetup setup = new JGroupChannelSetup(client, address, channelName);
+        JChannel channel = setup.getChannel();
+        distributedMap.setChannel(channel);
+
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(client);

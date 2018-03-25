@@ -2,10 +2,11 @@ package commands.defined;
 
 import client.Client;
 import commands.Command;
+import commands.Receiver;
 import hashmap.HashMapOperationProtos;
 import org.jgroups.Message;
 
-public class Remove implements Command {
+public class Remove implements Command, Receiver {
 
     private final Client client;
     private String key;
@@ -33,6 +34,11 @@ public class Remove implements Command {
             client.getChannel().close();
         }
 
+        apply();
+    }
+
+    @Override
+    public void apply() {
         client.getMap().remove(key);
     }
 }

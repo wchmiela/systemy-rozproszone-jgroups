@@ -18,4 +18,5 @@ public class Get implements Command {
         String value = client.getMap().get(key);
         System.out.println(value);
     }
+
 }
