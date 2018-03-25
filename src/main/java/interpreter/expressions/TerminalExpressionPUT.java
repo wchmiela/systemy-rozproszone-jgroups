@@ -2,7 +2,7 @@ package interpreter.expressions;
 
 import client.Client;
 import commands.Command;
-import commands.Put;
+import commands.defined.Put;
 import commands.UnknownCommand;
 
 import java.util.ArrayDeque;

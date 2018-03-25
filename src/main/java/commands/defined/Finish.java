@@ -1,4 +1,6 @@
-package commands;
+package commands.defined;
+
+import commands.Command;
 
 public class Finish implements Command {
 

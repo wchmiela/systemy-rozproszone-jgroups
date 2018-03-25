@@ -9,14 +9,13 @@ import java.util.concurrent.Executors;
 public class Runner {
 
     private static final String address = "224.0.0.7";
-    private static final int port = 6789;
     private static final String channelName = "rozprochyy";
 
     public static void main(String[] args) {
         JGroupChannelSetup setup = new JGroupChannelSetup(address, channelName);
         JChannel channel = setup.getChannel();
 
-        DistributedMap distributedMap = new DistributedMap(channel, address, port);
+        DistributedMap distributedMap = new DistributedMap(channel);
 
         Client client = new Client(distributedMap);
 

@@ -25,7 +25,7 @@ public class Client implements Runnable {
     public void run() {
 
         boolean running = true;
-        System.out.println("Witojcie");
+        System.out.println("Jgroups Distributed Hashmap");
 
         Parser parser = new MyParser(this);
 

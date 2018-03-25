@@ -1,6 +1,7 @@
-package commands;
+package commands.defined;
 
 import client.Client;
+import commands.Command;
 
 public class Get implements Command {
 

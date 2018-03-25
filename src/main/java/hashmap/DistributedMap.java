@@ -9,13 +9,9 @@ public class DistributedMap implements SimpleStringMap {
 
     private Map<String, String> map;
     private JChannel channel;
-    private String address;
-    private int port;
 
-    public DistributedMap(JChannel channel, String address, int port) {
+    public DistributedMap(JChannel channel) {
         this.channel = channel;
-        this.address = address;
-        this.port = port;
 
         this.map = new ConcurrentHashMap<>();
     }
