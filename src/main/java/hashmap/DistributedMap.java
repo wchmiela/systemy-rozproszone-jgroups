@@ -14,15 +14,6 @@ public class DistributedMap implements SimpleStringMap {
         this.map = new ConcurrentHashMap<>();
     }
 
-    public void setChannel(JChannel channel) {
-        this.channel = channel;
-    }
-
-    public DistributedMap(JChannel channel) {
-        this.channel = channel;
-
-    }
-
     @Override
     public boolean containsKey(String key) {
         return map.get(key) != null;
@@ -45,6 +36,10 @@ public class DistributedMap implements SimpleStringMap {
 
     public JChannel getChannel() {
         return channel;
+    }
+
+    public void setChannel(JChannel channel) {
+        this.channel = channel;
     }
 
     public Map<String, String> getMap() {

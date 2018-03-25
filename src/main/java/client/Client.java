@@ -14,7 +14,6 @@ import interpreter.Parser;
 import org.jgroups.*;
 
 import java.io.*;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +26,6 @@ public class Client extends ReceiverAdapter implements Runnable {
     public Client(DistributedMap map) {
         this.map = map;
         this.stdInput = new BufferedReader(new InputStreamReader(System.in));
-
     }
 
     @Override
@@ -49,10 +47,9 @@ public class Client extends ReceiverAdapter implements Runnable {
                 }
             }
         } catch (IOException e) {
-            //todo fill
+            System.out.println("Program ulegl natychmiastowemu zakonczeniu");
+            System.exit(0);
         }
-
-        System.exit(0);
     }
 
     private void executeCommand(Command command) {
@@ -103,11 +100,9 @@ public class Client extends ReceiverAdapter implements Runnable {
         synchronized (map.getMap()) {
             HashMapOperationProtos.HashMapState.Builder stateBuilder = HashMapOperationProtos.HashMapState.newBuilder();
 
-            for (Map.Entry<String, String> entry : map.getMap().entrySet()) {
-                stateBuilder.addEntriesBuilder()
-                        .setKey(entry.getKey())
-                        .setValue(entry.getValue());
-            }
+            map.getMap().forEach((key, value) -> stateBuilder.addEntriesBuilder()
+                    .setKey(key)
+                    .setValue(value));
 
             HashMapOperationProtos.HashMapState state = stateBuilder.build();
             state.writeTo(output);
@@ -120,12 +115,7 @@ public class Client extends ReceiverAdapter implements Runnable {
             HashMapOperationProtos.HashMapState state = HashMapOperationProtos.HashMapState.parseFrom(input);
             map.getMap().clear();
 
-            for (HashMapOperationProtos.HashMapState.Entry entry : state.getEntriesList()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-
-                map.getMap().put(key, value);
-            }
+            state.getEntriesList().forEach(entry -> map.getMap().put(entry.getKey(), entry.getValue()));
         }
     }
 
