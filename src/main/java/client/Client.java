@@ -1,11 +1,11 @@
 package client;
 
 import commands.Command;
-import commands.Console;
 import commands.UnknownCommand;
 import hashmap.DistributedMap;
 import interpreter.MyParser;
 import interpreter.Parser;
+import org.jgroups.Channel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,23 +16,27 @@ public class Client implements Runnable {
     private final DistributedMap map;
     private final BufferedReader stdInput;
 
-    public Client(DistributedMap map, Console console) {
+    public Client(DistributedMap map) {
         this.map = map;
         this.stdInput = new BufferedReader(new InputStreamReader(System.in));
     }
 
     @Override
     public void run() {
+
+        boolean running = true;
         System.out.println("Witojcie");
 
         Parser parser = new MyParser(this);
 
         try {
-            while (true) {
+            while (running) {
                 String userInput;
                 while ((userInput = stdInput.readLine()) != null) {
-                    parser.parse(userInput);
-                    parser.evaluate();
+                    running = parser.parse(userInput);
+
+                    if (!running) break;
+
                     executeCommand(parser.evaluate());
                 }
             }
@@ -40,25 +44,19 @@ public class Client implements Runnable {
             //todo fill
         }
 
-
-//        HashMapOperationProtos.HashMapOperation operation;
-//        operation = HashMapOperationProtos.HashMapOperation.newBuilder()
-//                .setValue("test" + new Random().nextInt())
-//                .setType(HashMapOperationProtos.HashMapOperation.OperationType.PUT)
-//                .build();
-//
-//        byte[] sendBuffer = operation.toByteArray();
-//
-//        Message message = new Message(null, null, sendBuffer);
-//        try {
-//            map.getChannel().send(message);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        System.exit(0);
     }
 
     private void executeCommand(Command command) {
         if (!(command instanceof UnknownCommand))
             command.execute();
+    }
+
+    public Channel getChannel() {
+        return map.getChannel();
+    }
+
+    public DistributedMap getMap() {
+        return map;
     }
 }

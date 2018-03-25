@@ -14,6 +14,7 @@ public class Get implements Command {
 
     @Override
     public void execute() {
-
+        String value = client.getMap().get(key);
+        System.out.println(value);
     }
 }

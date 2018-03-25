@@ -28,12 +28,12 @@ public class MyParser implements Parser {
                 .put("remove", new TerminalExpressionREMOVE(client))
                 .put("get", new TerminalExpressionGET(client))
                 .put("contains", new TerminalExpressionCONTAINS(client))
+                .put("finish", new TerminalExpressionFINISH())
                 .build();
     }
 
     @Override
-    public void parse(String command) {
-        if (command.trim().indexOf("#") == 0) return;
+    public boolean parse(String command) {
 
         List<String> list = Arrays.stream(command
                 .split("\\s"))
@@ -50,18 +50,12 @@ public class MyParser implements Parser {
                 }
             }
 
-            if (expression.matches("\\d+[.,]\\d+"))
+            if (expressions.get(expression) == null) {
                 s.add(new TerminalExpressionSTRING(expression));
-            if (expression.matches("put")) {
-                s.add(new TerminalExpressionPUT(client));
-            } else if (expression.matches("get")) {
-                s.add(new TerminalExpressionGET(client));
-            } else if (expression.matches("remove")) {
-                s.add(new TerminalExpressionREMOVE(client));
-            } else if (expression.matches("contains")) {
-                s.add(new TerminalExpressionCONTAINS(client));
             }
         }
+
+        return s.stream().noneMatch(expression -> expression instanceof TerminalExpressionFINISH);
     }
 
     @Override

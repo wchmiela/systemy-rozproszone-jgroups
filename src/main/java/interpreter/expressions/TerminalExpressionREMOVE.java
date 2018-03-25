@@ -2,7 +2,10 @@ package interpreter.expressions;
 
 import client.Client;
 import commands.Command;
+import commands.Remove;
+import commands.UnknownCommand;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class TerminalExpressionREMOVE implements Expression {
@@ -17,11 +20,17 @@ public class TerminalExpressionREMOVE implements Expression {
 
     @Override
     public Command interpret(Deque<Expression> s) {
-        return null;
+        ArrayDeque<Expression> parameters = Expression.getParameters(s);
+        if (parameters.size() != 1 || !(parameters.peekFirst() instanceof TerminalExpressionSTRING))
+            return new UnknownCommand(this, parameters);
+
+        String key = ((TerminalExpressionSTRING) parameters.pop()).getValue();
+
+        return new Remove(client, key);
     }
 
     @Override
     public String getRaw() {
-        return null;
+        return raw;
     }
 }

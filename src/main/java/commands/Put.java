@@ -1,6 +1,8 @@
 package commands;
 
 import client.Client;
+import hashmap.HashMapOperationProtos;
+import org.jgroups.Message;
 
 public class Put implements Command {
 
@@ -17,6 +19,23 @@ public class Put implements Command {
 
     @Override
     public void execute() {
+        HashMapOperationProtos.HashMapOperation operation;
+        operation = HashMapOperationProtos.HashMapOperation.newBuilder()
+                .setType(HashMapOperationProtos.HashMapOperation.OperationType.PUT)
+                .setKey(key)
+                .setValue(value)
+                .build();
 
+        byte[] sendBuffer = operation.toByteArray();
+
+        Message message = new Message(null, null, sendBuffer);
+
+        try {
+            client.getChannel().send(message);
+        } catch (Exception e) {
+            client.getChannel().close();
+        }
+
+        client.getMap().put(key, value);
     }
 }

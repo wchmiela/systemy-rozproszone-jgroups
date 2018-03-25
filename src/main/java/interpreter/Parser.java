@@ -4,7 +4,7 @@ import commands.Command;
 
 public interface Parser {
 
-    void parse(String line);
+    boolean parse(String line);
 
     Command evaluate();
 }

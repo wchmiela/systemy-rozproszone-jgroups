@@ -40,10 +40,6 @@ public class DistributedMap implements SimpleStringMap {
         return map.remove(key);
     }
 
-    public Map<String, String> getMap() {
-        return map;
-    }
-
     public JChannel getChannel() {
         return channel;
     }

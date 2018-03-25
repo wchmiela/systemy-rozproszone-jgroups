@@ -15,6 +15,9 @@ public class Contains implements Command {
 
     @Override
     public void execute() {
-
+        boolean contains = client.getMap().containsKey(key);
+        String answer = contains
+                ? String.format("Hashmapa zawiera %s", key) : String.format("Hashmapa nie zawiera %s", key);
+        System.out.println(answer);
     }
 }

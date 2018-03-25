@@ -21,7 +21,7 @@ public class TerminalExpressionPUT implements Expression {
     @Override
     public Command interpret(Deque<Expression> s) {
         ArrayDeque<Expression> parameters = Expression.getParameters(s);
-        if (parameters.size() != 1 || !(parameters.peekFirst() instanceof TerminalExpressionSTRING))
+        if (parameters.size() != 2 || !(parameters.peekFirst() instanceof TerminalExpressionSTRING))
             return new UnknownCommand(this, parameters);
 
         String key = ((TerminalExpressionSTRING) parameters.pop()).getValue();
